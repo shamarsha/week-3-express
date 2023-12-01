@@ -4,8 +4,10 @@ const app = express()
 var cors = require('cors')
 var bodyParser = require('body-parser')
 
+// create application/json parser
 var jsonParser = bodyParser.json()
 
+// create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 const port = 3000
@@ -15,17 +17,30 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 
 app.get('/', (req, res) => {
-    res.json('website A')
+  res.json('Hello World!')
 })
 
-app.post('/github-event', (req, res) => {
-  if (req.body.secret !== 'secret123') {
-    return res.status(403).json({ error: "Invalid secret" });
-  }
+app.post('/login', (req, res) => {
+    // Simulasi data dari database
+    const username = 'joko'
+    const password = '12345678'
 
-  console.log('Incoming Webhook')
-  res.json("")
-})
+    if (req.body.username === username) {
+        if (req.body.password === password) {
+            res.json({
+                status: 'success'
+            })
+        }  else {
+            res.json({
+                status: 'error, wrong password'
+            })
+        }
+    } else {
+        res.json({
+            status: 'error, username not found'
+        })
+    }
+  })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
